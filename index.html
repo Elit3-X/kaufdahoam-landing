@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KaufDahoam — Weil's dahoam am besten schmeckt</title>
+  <meta name="description" content="KaufDahoam verbindet Verbraucher mit bayerischen Bauernhöfen, Hofläden, Märkten und Imkern. Kostenlos. Ohne Zwischenhändler.">
+  <meta property="og:title" content="KaufDahoam — Weil's dahoam am besten schmeckt">
+  <meta property="og:description" content="Bayerns Bauernhöfe auf einer Karte. 6.900+ Hofläden, Märkte, Automaten und Imkereien.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Gaya';
+      src: url('Gaya-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --green: #1B4332;
+      --green-mid: #2D6A4F;
+      --green-light: #40916C;
+      --gold: #C9A84C;
+      --gold-light: #D4B96A;
+      --cream: #FAF7F2;
+      --cream-mid: #F0EBE1;
+      --white: #FFFFFF;
+      --text: #1A1A1A;
+      --text-secondary: #5C5C5C;
+      --text-muted: #8A8A8A;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Language system (use !important to beat component display values) ── */
+    [data-lang="en"] { display: none !important; }
+    body.en [data-lang="de"] { display: none !important; }
+    body.en [data-lang="en"] { display: block !important; }
+    body.en span[data-lang="en"],
+    body.en a[data-lang="en"] { display: inline !important; }
+    body.en div.hero-label[data-lang="en"] { display: inline-block !important; }
+    body.en .footer-inner[data-lang="en"] { display: grid !important; }
+    body.en .story-grid[data-lang="en"] { display: grid !important; }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    nav.scrolled {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+      padding: 0.9rem 2rem;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Gaya', Georgia, serif;
+      font-size: 1.35rem;
+      color: var(--green);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    /* ── Cookie Banner ── */
+    .cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 1rem 1.25rem;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .cookie-banner.visible { display: flex; }
+
+    .cookie-banner a {
+      color: var(--green-mid);
+      text-decoration: underline;
+    }
+
+    .cookie-btn {
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.45rem 1.1rem;
+      border-radius: 2rem;
+      transition: all 0.2s;
+    }
+
+    .cookie-btn--accept {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .cookie-btn--reject {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .lang-toggle {
+      display: flex;
+      border-radius: 2rem;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .lang-toggle button {
+      border: none;
+      background: transparent;
+      padding: 0.35rem 0.9rem;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.25s ease;
+      letter-spacing: 0.04em;
+    }
+
+    .lang-toggle button.active {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1.25rem;
+      background: var(--green);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 2rem;
+      transition: all 0.25s ease;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-cta:hover {
+      background: var(--green-mid);
+      transform: translateY(-1px);
+    }
+
+    .nav-cta svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ── Scroll Animations ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 6rem;
+      position: relative;
+      overflow: hidden;
+      background: var(--green);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+    }
+
+    .hero-bg spline-viewer {
+      width: 100%;
+      height: 100%;
+      display: block;
+      --spline-viewer-background: transparent;
+    }
+
+    /* Spline viewer: block pointer events on logo area */
+    .hero-bg { pointer-events: none; }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+    }
+
+    .hero-label {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Gaya', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(3.5rem, 10vw, 7.5rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 40%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      animation: fadeUp 1s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero .tagline {
+      font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.5;
+      max-width: 540px;
+      margin: 0 auto 3rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 2rem;
+      background: var(--green);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 3rem;
+      transition: all 0.3s ease;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-cta:hover {
+      background: var(--green-mid);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(27, 67, 50, 0.2);
+    }
+
+    .hero-cta svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.25s ease;
+    }
+
+    .hero-cta:hover svg {
+      transform: translateX(3px);
+    }
+
+    .hero-cta--donate {
+      background: var(--gold);
+      animation-delay: 1.1s;
+    }
+
+    .hero-cta--donate:hover {
+      background: var(--gold-light);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-scroll span {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--text-muted), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Section Layout ── */
+    .section {
+      padding: 5rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-narrow {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-family: 'Gaya', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--green);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 600px;
+    }
+
+    /* ── Story Section ── */
+    .story-section {
+      background: var(--white);
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      margin-top: 2rem;
+    }
+
+    .story-col p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    .story-col p:last-child {
+      margin-bottom: 0;
+    }
+
+    .story-highlight {
+      font-family: 'Gaya', Georgia, serif;
+      font-size: 1.8rem;
+      line-height: 1.35;
+      color: var(--green);
+      margin: 2rem 0;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .story-highlight::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.25rem;
+      bottom: 0.25rem;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--gold), var(--gold-light));
+      border-radius: 2px;
+    }
+
+    /* ── Stats Section ── */
+    .stats-section {
+      background: var(--green);
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stats-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 80% 20%, rgba(201, 168, 76, 0.08) 0%, transparent 50%),
+                  radial-gradient(ellipse at 20% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .stats-section .section-label { color: var(--gold-light); }
+    .stats-section .section-title { color: var(--white); }
+    .stats-section .section-subtitle { color: rgba(255, 255, 255, 0.7); }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    .stat-number {
+      font-family: 'Gaya', Georgia, serif;
+      font-size: clamp(2.5rem, 5vw, 3.8rem);
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .stat-suffix {
+      font-family: 'Gaya', Georgia, serif;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    .stat-label sup {
+      font-size: 0.6em;
+      color: var(--gold-light);
+      margin-left: 0.15em;
+    }
+
+    /* ── Infographic ── */
+    .infographic-section {
+      background: var(--cream);
+    }
+
+    .infographic-wrap {
+      max-width: 960px;
+      margin: 2rem auto 0;
+    }
+
+    .infographic-wrap img {
+      width: 100%;
+      display: block;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ── Support / Donate Section ── */
+    .support-section {
+      background: var(--cream);
+      text-align: center;
+    }
+
+    .support-section .section-label,
+    .support-section .section-title,
+    .support-section .section-subtitle {
+      text-align: center;
+    }
+
+    .support-section .section-subtitle {
+      margin: 0 auto 2.5rem;
+    }
+
+    .donate-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 500;
+      border-radius: 3rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(201, 168, 76, 0.25);
+    }
+
+    .donate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(201, 168, 76, 0.35);
+    }
+
+    .support-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 1.25rem;
+    }
+
+    /* ── Sources ── */
+    .sources-section {
+      background: var(--white);
+      padding: 2.5rem 2rem;
+    }
+
+    .sources-toggle {
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border: none;
+      background: none;
+      font-family: inherit;
+      padding: 0.5rem 0;
+      transition: color 0.2s;
+    }
+
+    .sources-toggle:hover {
+      color: var(--text);
+    }
+
+    .sources-toggle svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.3s ease;
+    }
+
+    .sources-toggle.open svg {
+      transform: rotate(180deg);
+    }
+
+    .sources-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sources-content.open {
+      max-height: 600px;
+    }
+
+    .sources-list {
+      padding: 1.5rem 0 0 1.2rem;
+      list-style: decimal;
+    }
+
+    .sources-list li {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .sources-list a {
+      color: var(--green-mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .sources-list a:hover {
+      color: var(--green);
+      text-decoration: underline;
+    }
+
+    /* ── Footer (duna-style full-bleed illustration) ── */
+    footer {
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: var(--green);
+    }
+
+    .footer-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+    }
+
+    /* Fallback gradient when no image */
+    .footer-bg--fallback {
+      background:
+        linear-gradient(180deg,
+          #1a3a2a 0%,
+          #1e4230 10%,
+          #264d38 25%,
+          #2d5a3a 45%,
+          #3a6a42 65%,
+          #2d5a27 80%,
+          #1B4332 100%
+        );
+    }
+
+    footer .footer-inner,
+    footer .footer-bottom {
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 4rem 2rem 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem 3rem;
+    }
+
+    .footer-col h4 {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: none;
+      margin-bottom: 0.65rem;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: var(--white);
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 1.5rem 2rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer-bottom a {
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-bottom a:hover {
+      color: var(--white);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .story-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+
+      .footer-inner {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .section {
+        padding: 3.5rem 1.25rem;
+      }
+
+      .hero {
+        padding: 7rem 1.25rem 5rem;
+        min-height: 90vh;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .stat-card {
+        padding: 1.25rem 0.75rem;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+      }
+
+      .stat-label {
+        font-size: 0.8rem;
+      }
+
+      .story-highlight {
+        font-size: 1.4rem;
+      }
+
+      nav {
+        padding: 1rem 1.25rem;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .features-number {
+        font-size: 3rem;
+      }
+
+
+      .footer-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        padding: 3rem 1.25rem 0;
+      }
+
+      .footer-bottom {
+        padding: 1rem 1.25rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav id="navbar">
+    <a href="#" class="nav-brand"><img src="icon.png" alt="KaufDahoam" width="32" height="32">KaufDahoam</a>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button id="btn-de" class="active" onclick="setLang('de')">DE</button>
+        <button id="btn-en" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="https://apps.apple.com/app/kaufdahoam/id6759842108" class="nav-cta" target="_blank" rel="noopener">
+        <span data-lang="de">App laden</span>
+        <span data-lang="en">Get the App</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <header class="hero">
+    <div class="hero-bg">
+      <spline-viewer url="https://prod.spline.design/Wxnd-eL0V5peaTCd/scene.splinecode" loading-anim-type="none" events-target="none" hint="false"></spline-viewer>
+    </div>
+    <div class="hero-content">
+      <div class="hero-label" data-lang="de">Bayerns Bauernhöfe auf einer Karte</div>
+      <div class="hero-label" data-lang="en">Bavaria's farms on one map</div>
+      <h1>KaufDahoam</h1>
+      <p class="tagline" data-lang="de">Weil's dahoam am besten schmeckt.</p>
+      <p class="tagline" data-lang="en">Because food tastes best when it comes from home.</p>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:0.75rem;">
+        <a href="https://apps.apple.com/app/kaufdahoam/id6759842108" class="hero-cta" target="_blank" rel="noopener">
+          <span data-lang="de">Kostenlos herunterladen</span>
+          <span data-lang="en">Download for Free</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/></svg>
+        </a>
+        <a href="https://paypal.me/DEIN_HANDLE" class="hero-cta hero-cta--donate" target="_blank" rel="noopener">
+          <span data-lang="de">Kaffee spendieren</span>
+          <span data-lang="en">Buy us a coffee</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span data-lang="de">Unsere Geschichte</span>
+      <span data-lang="en">Our story</span>
+      <div class="scroll-line"></div>
+    </div>
+  </header>
+
+  <!-- ── Story ── -->
+  <section id="story" class="section story-section">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label" data-lang="de">Unsere Geschichte</div>
+        <div class="section-label" data-lang="en">Our Story</div>
+        <h2 class="section-title" data-lang="de">Zwei Entwickler.<br>Ein Dorf. Echtes Essen.</h2>
+        <h2 class="section-title" data-lang="en">Two developers.<br>One village. Real food.</h2>
+      </div>
+
+      <div class="story-grid" data-lang="de">
+        <div class="story-col reveal reveal-delay-1">
+          <p>Wir sind zwei Entwickler aus verschiedenen Ecken der Welt. Das Leben hat uns beide nach Vierkirchen gebracht &mdash; ein kleines Dorf nördlich von München, in dem Traktoren Vorfahrt haben und die Kirchenglocken den Tag einteilen.</p>
+          <p>Wir sind nicht hier aufgewachsen. Aber unsere Kinder schon. Sie trinken Milch vom Hof um die Ecke. Sie essen Eier von Hühnern, die tatsächlich Sonne sehen. Sie kennen den Imker beim Namen.</p>
+        </div>
+        <div class="story-col reveal reveal-delay-2">
+          <div class="story-highlight">Das verändert etwas in einem.</div>
+          <p>Irgendwann haben wir uns gefragt: Warum ist es so schwer, diese Orte zu finden? Der Hofladen drei Kilometer weiter, den keiner kennt. Der Milchautomat, der um Mitternacht noch offen hat. Der Imker, der Honig am Gartentor verkauft.</p>
+          <p>Sie sind alle da &mdash; nur unsichtbar. Also haben wir KaufDahoam gebaut. Eine Karte. Ein Verzeichnis. Ein kleines digitales Dankeschön an die Bauern, die unsere Familien mit echtem Essen versorgen.</p>
+        </div>
+      </div>
+      <div class="story-grid" data-lang="en">
+        <div class="story-col reveal reveal-delay-1">
+          <p>We are two developers from different corners of the world. Life brought us both to Vierkirchen &mdash; a small village north of Munich where tractors have the right of way and church bells mark the hours.</p>
+          <p>We didn't grow up here. But our kids are growing up here. They drink milk from the farm down the road. They eat eggs from chickens that actually see the sun. They know the beekeeper by name.</p>
+        </div>
+        <div class="story-col reveal reveal-delay-2">
+          <div class="story-highlight">That changes something in you.</div>
+          <p>At some point we asked ourselves: Why is it so hard to find these places? The farm shop three kilometres away that nobody knows about. The milk vending machine that's still open at midnight. The beekeeper selling honey at his garden gate.</p>
+          <p>They're all there &mdash; just invisible. So we built KaufDahoam. A map. A directory. A small digital thank-you to the farmers who feed our families real food.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Stats ── -->
+  <section class="section stats-section">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label" data-lang="de">Zahlen &amp; Fakten</div>
+        <div class="section-label" data-lang="en">Facts &amp; Figures</div>
+        <h2 class="section-title" data-lang="de">Bayern ist Deutschlands Agrarherz.<br>Aber auch hier verschwinden die Höfe.</h2>
+        <h2 class="section-title" data-lang="en">Bavaria is Germany's agricultural heartland.<br>But even here, farms are disappearing.</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card reveal reveal-delay-1">
+          <span class="stat-number" data-count="100700" data-suffix="" data-separator>0</span>
+          <div data-lang="de"><span class="stat-label">Familienbetriebe in Bayern &mdash; keine Fabriken, Familien<sup>1</sup></span></div>
+          <div data-lang="en"><span class="stat-label">Family farms in Bavaria &mdash; not factories, families<sup>1</sup></span></div>
+        </div>
+        <div class="stat-card reveal reveal-delay-2">
+          <span class="stat-number" data-count="50" data-suffix=" %">0</span>
+          <div data-lang="de"><span class="stat-label">der Milchviehbetriebe in 20 Jahren verloren<sup>2</sup></span></div>
+          <div data-lang="en"><span class="stat-label">of dairy farms lost in the last 20 years<sup>2</sup></span></div>
+        </div>
+        <div class="stat-card reveal reveal-delay-3">
+          <span class="stat-number" data-count="11900" data-suffix="" data-separator>0</span>
+          <div data-lang="de"><span class="stat-label">Bio-Höfe &mdash; mehr als in jedem anderen Bundesland<sup>3</sup></span></div>
+          <div data-lang="en"><span class="stat-label">Organic farms &mdash; more than any other German state<sup>3</sup></span></div>
+        </div>
+        <div class="stat-card reveal reveal-delay-4">
+          <span class="stat-number" data-count="7800" data-suffix="+" data-separator>0</span>
+          <div data-lang="de"><span class="stat-label">Hofläden, Automaten, Märkte &amp; Imkereien<sup>4</sup></span></div>
+          <div data-lang="en"><span class="stat-label">Farm shops, vending machines, markets &amp; apiaries<sup>4</sup></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Infographic ── -->
+  <section class="section infographic-section">
+    <div class="section-inner" style="text-align: center;">
+      <div class="reveal">
+        <div class="section-label" style="text-align: center;" data-lang="de">Infografik</div>
+        <div class="section-label" style="text-align: center;" data-lang="en">Infographic</div>
+        <h2 class="section-title" style="text-align: center;" data-lang="de">Der Bayerische Weg</h2>
+        <h2 class="section-title" style="text-align: center;" data-lang="en">The Bavarian Way</h2>
+        <p class="section-subtitle" style="text-align: center; margin: 0 auto;" data-lang="de">Unsere Bauern sichern Bayerns Zukunft.</p>
+        <p class="section-subtitle" style="text-align: center; margin: 0 auto;" data-lang="en">Our farmers secure Bavaria's future.</p>
+      </div>
+      <div class="infographic-wrap reveal reveal-delay-1">
+        <img src="infographic.png" data-lang="de" alt="Der Bayerische Weg: Unsere Bauern sichern Bayerns Zukunft — Infografik">
+        <img src="infographic.png" data-lang="en" alt="The Bavarian Way: Our farmers secure Bavaria's future — infographic">
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Support / Donate ── -->
+  <section class="section support-section">
+    <div class="section-narrow">
+      <div class="reveal">
+        <div class="section-label" style="text-align:center" data-lang="de">Unterstützen</div>
+        <div class="section-label" style="text-align:center" data-lang="en">Support</div>
+        <h2 class="section-title" style="text-align:center" data-lang="de">KaufDahoam unterstützen</h2>
+        <h2 class="section-title" style="text-align:center" data-lang="en">Support KaufDahoam</h2>
+        <p class="section-subtitle" style="text-align:center; margin: 0 auto 2.5rem;" data-lang="de">KaufDahoam ist ein ehrenamtliches Projekt. Wir bauen es in unserer Freizeit, weil wir daran glauben. Wenn du helfen möchtest, die Server am Laufen und die Daten aktuell zu halten:</p>
+        <p class="section-subtitle" style="text-align:center; margin: 0 auto 2.5rem;" data-lang="en">KaufDahoam is a volunteer project. We build it in our spare time because we believe in it. If you'd like to help keep the servers running and the data fresh:</p>
+      </div>
+      <div class="reveal reveal-delay-1" style="text-align: center;">
+        <a href="https://paypal.me/DEIN_HANDLE" class="donate-btn" data-lang="de">Kaffee spendieren</a>
+        <a href="https://paypal.me/DEIN_HANDLE" class="donate-btn" data-lang="en">Buy us a coffee</a>
+        <p class="support-note" data-lang="de">100 % geht in Serverkosten und Datenqualität. Kein Gewinn, kein Gehalt.</p>
+        <p class="support-note" data-lang="en">100% goes to server costs and data quality. No profit, no salaries.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Sources ── -->
+  <div class="sources-section">
+    <div style="max-width: 720px; margin: 0 auto;">
+      <button class="sources-toggle" id="sources-toggle" onclick="toggleSources()">
+        <span data-lang="de">Quellen anzeigen</span>
+        <span data-lang="en">Show sources</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+      </button>
+      <div class="sources-content" id="sources-content">
+        <ol class="sources-list" data-lang="de">
+          <li><strong>100.700 Familienbetriebe / 30,7 ha Durchschnitt:</strong> Bayerisches Landesamt für Statistik (LfStat), <a href="https://www.agrarbericht-bayern.bayern.de/landwirtschaft/betriebsgroessenstruktur.html" target="_blank" rel="noopener">Agrarbericht Bayern 2024</a>; Sonderauswertung kiVeKoS 2021.</li>
+          <li><strong>50 % Rückgang Milchviehbetriebe:</strong> BUND Naturschutz in Bayern e.V., <a href="https://www.bund-naturschutz.de/landwirtschaft/massentierhaltung" target="_blank" rel="noopener">Massentierhaltung in Bayern</a>.</li>
+          <li><strong>11.900 Bio-Höfe / 13,6 % Öko-Fläche:</strong> StMELF, <a href="https://www.stmelf.bayern.de/landwirtschaft/oekolandbau/index.html" target="_blank" rel="noopener">BioRegio 2030</a>.</li>
+          <li><strong>7.800+ Direktvermarktungsstellen:</strong> StMELF, <a href="https://www.stmelf.bayern.de/landwirtschaft/diversifizierung/index.html" target="_blank" rel="noopener">Diversifizierung und Direktvermarktung</a>; eigene Datenerhebung.</li>
+          <li><strong>Heumilch &mdash; Omega-3 und CLA:</strong> Andechser Natur, <a href="https://www.andechser-natur.de/de/bio-molkerei/natur" target="_blank" rel="noopener">Natürliches natürlich belassen</a>.</li>
+          <li><strong>Historische Quellen / Milchstreik 2008:</strong> <a href="https://www.kritischer-agrarbericht.de/fileadmin/Daten-KAB/KAB-2009/Jasper_1.pdf" target="_blank" rel="noopener">Kritischer Agrarbericht 2009</a>; <a href="https://www.historisches-lexikon-bayerns.de/Lexikon/Landwirtschaft_(19./20._Jahrhundert)" target="_blank" rel="noopener">Historisches Lexikon Bayerns</a>.</li>
+        </ol>
+        <ol class="sources-list" data-lang="en">
+          <li><strong>100,700 family farms / 30.7 ha average:</strong> Bavarian State Office for Statistics (LfStat), <a href="https://www.agrarbericht-bayern.bayern.de/landwirtschaft/betriebsgroessenstruktur.html" target="_blank" rel="noopener">Agrarbericht Bayern 2024</a>.</li>
+          <li><strong>50% decline in dairy farms:</strong> BUND Naturschutz Bayern e.V., <a href="https://www.bund-naturschutz.de/landwirtschaft/massentierhaltung" target="_blank" rel="noopener">Intensive Farming in Bavaria</a>.</li>
+          <li><strong>11,900 organic farms / 13.6% organic share:</strong> StMELF, <a href="https://www.stmelf.bayern.de/landwirtschaft/oekolandbau/index.html" target="_blank" rel="noopener">BioRegio 2030</a>.</li>
+          <li><strong>7,800+ direct-sale locations:</strong> StMELF, <a href="https://www.stmelf.bayern.de/landwirtschaft/diversifizierung/index.html" target="_blank" rel="noopener">Diversification and Direct Marketing</a>; KaufDahoam data.</li>
+          <li><strong>Hay milk &mdash; Omega-3 and CLA:</strong> Andechser Natur, <a href="https://www.andechser-natur.de/de/bio-molkerei/natur" target="_blank" rel="noopener">Natural, kept natural</a>.</li>
+          <li><strong>Historical / 2008 milk strike:</strong> <a href="https://www.kritischer-agrarbericht.de/fileadmin/Daten-KAB/KAB-2009/Jasper_1.pdf" target="_blank" rel="noopener">Kritischer Agrarbericht 2009</a>; <a href="https://www.historisches-lexikon-bayerns.de/Lexikon/Landwirtschaft_(19./20._Jahrhundert)" target="_blank" rel="noopener">Historical Lexicon of Bavaria</a>.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer (duna-style illustrated) ── -->
+  <footer>
+    <div class="footer-bg footer-bg--fallback">
+      <!-- Replace with Bavarian landscape illustration: <img src="footer-bg.jpg" alt=""> -->
+    </div>
+
+    <div class="footer-bottom">
+      <span data-lang="de">&copy; 2026 KaufDahoam</span>
+      <span data-lang="en">&copy; 2026 KaufDahoam</span>
+      <a href="datenschutz.html" data-lang="de">Datenschutz</a>
+      <a href="datenschutz.html" data-lang="en">Privacy Policy</a>
+      <a href="impressum.html" data-lang="de">Impressum</a>
+      <a href="impressum.html" data-lang="en">Imprint</a>
+    </div>
+  </footer>
+
+  <!-- ── Cookie Banner ── -->
+  <div class="cookie-banner" id="cookie-banner">
+    <span data-lang="de">Wir verwenden Cookies für grundlegende Funktionen. <a href="datenschutz.html">Mehr erfahren</a></span>
+    <span data-lang="en">We use cookies for basic functionality. <a href="datenschutz.html">Learn more</a></span>
+    <button class="cookie-btn cookie-btn--accept" onclick="acceptCookies()">
+      <span data-lang="de">Akzeptieren</span>
+      <span data-lang="en">Accept</span>
+    </button>
+    <button class="cookie-btn cookie-btn--reject" onclick="rejectCookies()">
+      <span data-lang="de">Ablehnen</span>
+      <span data-lang="en">Reject</span>
+    </button>
+  </div>
+
+  <script>
+    // ── Cookie Consent ──
+    function acceptCookies() {
+      localStorage.setItem('kd_cookie_consent', 'accepted');
+      document.getElementById('cookie-banner').classList.remove('visible');
+    }
+    function rejectCookies() {
+      localStorage.setItem('kd_cookie_consent', 'rejected');
+      document.getElementById('cookie-banner').classList.remove('visible');
+    }
+    if (!localStorage.getItem('kd_cookie_consent')) {
+      document.getElementById('cookie-banner').classList.add('visible');
+    }
+
+    // ── Remove Spline branding from shadow DOM ──
+    (function hideSplineLogo() {
+      const sv = document.querySelector('spline-viewer');
+      if (!sv) return;
+      function remove() {
+        if (sv.shadowRoot) {
+          const logo = sv.shadowRoot.querySelector('#logo');
+          if (logo) logo.remove();
+        }
+      }
+      sv.addEventListener('load', remove);
+      // Fallback: poll briefly in case load already fired
+      let tries = 0;
+      const iv = setInterval(() => {
+        remove();
+        if (++tries > 20) clearInterval(iv);
+      }, 500);
+    })();
+
+    // ── Language Toggle ──
+    function setLang(lang) {
+      document.body.className = lang === 'en' ? 'en' : '';
+      document.getElementById('btn-de').className = lang === 'de' ? 'active' : '';
+      document.getElementById('btn-en').className = lang === 'en' ? 'active' : '';
+      document.documentElement.lang = lang;
+    }
+
+    // ── Sources Toggle ──
+    function toggleSources() {
+      const btn = document.getElementById('sources-toggle');
+      const content = document.getElementById('sources-content');
+      btn.classList.toggle('open');
+      content.classList.toggle('open');
+    }
+
+    // ── Navbar Scroll ──
+    const navbar = document.getElementById('navbar');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Scroll Reveal ──
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ── Counter Animation ──
+    function formatNumber(n, useSeparator) {
+      if (!useSeparator) return n.toString();
+      // Use dot separator for German-style numbers
+      return n.toLocaleString('de-DE');
+    }
+
+    function animateCounter(el) {
+      const target = parseInt(el.dataset.count, 10);
+      const suffix = el.dataset.suffix || '';
+      const useSeparator = el.hasAttribute('data-separator');
+      const duration = 2000;
+      const startTime = performance.now();
+
+      function easeOutExpo(t) {
+        return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+      }
+
+      function update(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = easeOutExpo(progress);
+        const current = Math.round(eased * target);
+        el.textContent = formatNumber(current, useSeparator) + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+  </script>
+
+</body>
+</html>
