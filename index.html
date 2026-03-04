@@ -239,13 +239,19 @@
       padding: 8rem 2rem 6rem;
       position: relative;
       overflow: hidden;
-      background: var(--green);
+      background: var(--cream);
     }
 
     .hero-bg {
       position: absolute;
       inset: 0;
       z-index: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .hero-bg.loaded {
+      opacity: 1;
     }
 
     .hero-bg img {
@@ -1069,22 +1075,27 @@
       document.getElementById('cookie-banner').classList.add('visible');
     }
 
-    // ── Remove Spline branding from shadow DOM ──
-    (function hideSplineLogo() {
+    // ── Fade in Spline once loaded + remove branding ──
+    (function initSpline() {
       const sv = document.querySelector('spline-viewer');
-      if (!sv) return;
-      function remove() {
+      const heroBg = document.querySelector('.hero-bg');
+      if (!sv || !heroBg) return;
+      function onReady() {
+        heroBg.classList.add('loaded');
         if (sv.shadowRoot) {
           const logo = sv.shadowRoot.querySelector('#logo');
           if (logo) logo.remove();
         }
       }
-      sv.addEventListener('load', remove);
+      sv.addEventListener('load', onReady);
       // Fallback: poll briefly in case load already fired
       let tries = 0;
       const iv = setInterval(() => {
-        remove();
-        if (++tries > 20) clearInterval(iv);
+        if (sv.shadowRoot && sv.shadowRoot.querySelector('canvas')) {
+          onReady();
+          clearInterval(iv);
+        }
+        if (++tries > 40) clearInterval(iv);
       }, 500);
     })();
 
